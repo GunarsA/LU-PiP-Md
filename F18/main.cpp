@@ -40,7 +40,7 @@ int main()
             string line;
             getline(fileIn, line);
             line.push_back(' ');
-            
+
             for (uint i = 0, wordLen = 0; i < line.size(); ++i, ++wordLen)
             {
                 if (find(begin(separators), end(separators), line[i]) != end(separators))
