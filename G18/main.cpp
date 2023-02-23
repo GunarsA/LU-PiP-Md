@@ -44,7 +44,7 @@ int main()
     string input;
     int element;
     getline(cin, input);
-    while(!input.empty())
+    for(int i = 2; !input.empty(); ++i)
     {
         int temp = stoi(input);
         list.push_back(temp);
