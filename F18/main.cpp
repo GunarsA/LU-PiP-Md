@@ -9,6 +9,9 @@
 // vārdu uzskatīt patvaļīgu simbolu virkni, kas atdalīta ar tukšumiem vai
 // pieturas zīmēm (punkts, komats, apaļās iekavas, izsaukuma zīme, jautājuma zīme).
 
+// Gunārs Ābeltiņš
+// 2023.03.06
+
 #include <windows.h>
 #include <iostream>
 #include <fstream>
@@ -23,43 +26,75 @@ int main()
 {
     SetConsoleOutputCP(CP_UTF8);
 
-    uint wordCount[MAX_WORD_SIZE]{};
-    char separators[] = {' ', '.', ',', '(', ')', '!', '?'};
+    const char SEPARATORS[] = {' ', '.', ',', '(', ')', '!', '?'};
 
-    ifstream fileIn("f.txt", ios::in);
+    int go = 0;
+    do
+    {
+        uint wordCount[MAX_WORD_SIZE]{};
 
-    if (!fileIn.is_open())
-    {
-        cout << "Fails 'f.txt' neeksistē!" << endl;
-    }
-    else
-    {
-        uint longestWord = 0;
-        while (!fileIn.eof())
+        ifstream fileIn("f.txt", ios::in);
+
+        if (!fileIn.is_open())
         {
-            string line;
-            getline(fileIn, line);
-            line.push_back(' ');
+            cout << "Fails 'f.txt' neeksistē!" << endl;
+        }
+        else
+        {
+            uint longestWord = 0;
 
-            for (uint i = 0, wordLen = 0; i < line.size(); ++i, ++wordLen)
+            while (!fileIn.eof())
             {
-                if (find(begin(separators), end(separators), line[i]) != end(separators))
+                string line;
+                getline(fileIn, line);
+                line.push_back(' ');
+
+                for (uint i = 0, wordLen = 0; i < line.size(); ++i, ++wordLen)
                 {
-                    if (wordLen)
+                    if (find(begin(SEPARATORS), end(SEPARATORS), line[i]) != end(SEPARATORS))
                     {
-                        ++wordCount[wordLen - 1];
-                        longestWord = max(longestWord, wordLen);
+                        if (wordLen)
+                        {
+                            ++wordCount[wordLen - 1];
+                            // Saglābā garākā vārda garumu, lai beigās netiktu izvadītas daudzas nulles.
+                            longestWord = max(longestWord, wordLen);
+                        }
+                        wordLen = -1;
                     }
-                    wordLen = -1;
                 }
             }
-        }
+            fileIn.close();
 
-        for (uint i = 0; i < min(longestWord, MAX_WORD_SIZE); ++i)
-        {
-            cout << "Vārdi garumā [" << i + 1 << "]: " << wordCount[i] << endl;
+            ofstream fileOut("out.txt", ios::out);
+            for (uint i = 0; i < min(longestWord, MAX_WORD_SIZE); ++i)
+            {
+                string outputStr = "Vārdi garumā [" + to_string(i + 1) + "]: " + to_string(wordCount[i]) + "\n";
+                cout << outputStr;
+                fileOut << outputStr;
+            }
+            fileOut.close();
         }
-    }
+        cout << "Atkārtot? (1 | 0)?: ";
+        cin >> go;
+    } while (go);
 
     return 0;
 }
+
+//                                          Ievads | Izvads
+// ------------------------------------------------|--------------------
+// Dolore, minim commodo () do aliqua cupidatat.!? | Vārdi garumā [1]: 0
+//                                                 | Vārdi garumā [2]: 1
+//                                                 | Vārdi garumā [3]: 0
+//                                                 | Vārdi garumā [4]: 0
+//                                                 | Vārdi garumā [5]: 1
+//                                                 | Vārdi garumā [6]: 2
+//                                                 | Vārdi garumā [7]: 1
+//                                                 | Vārdi garumā [8]: 0
+//                                                 | Vārdi garumā [9]: 1
+// ------------------------------------------------|--------------------
+//                                                 |
+// ------------------------------------------------|--------------------
+// a b c ee ef                                     | Vārdi garumā [1]: 3
+//                                                 | Vārdi garumā [2]: 2
+
