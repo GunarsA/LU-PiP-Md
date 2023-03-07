@@ -18,18 +18,47 @@
 
 using namespace std;
 
-struct Node
+struct node
 {
-    Node *next;
     int value;
+    node *next;
 };
 
-class List
+class SingleLinkedList
 {
 public:
-    List()
+    node *first = NULL;
+    node *last = NULL;
+
+    SingleLinkedList()
     {
-        
+        cout << "List initialized!" << endl;
+    }
+
+    ~SingleLinkedList()
+    {
+        for (auto i = first; i; i = first)
+        {
+            first = first->next;
+            delete i;
+        }
+
+        cout << "List deleted!" << endl;
+    }
+
+    void push_back(int value)
+    {
+        node *newNode = new node{value, nullptr};
+
+        if (!first)
+        {
+            first = last = newNode;
+        }
+        else
+        {
+            last->next = newNode;
+            last = last->next;
+        }
     }
 };
 

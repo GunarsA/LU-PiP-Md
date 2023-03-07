@@ -51,8 +51,11 @@ int main()
 
                 for (uint i = 0, wordLen = 0; i < line.size(); ++i, ++wordLen)
                 {
+                    // Pārbauda vai ir atrast vārdus atdalošs simbols
                     if (find(begin(SEPARATORS), end(SEPARATORS), line[i]) != end(SEPARATORS))
                     {
+                        // Ja pa vidu simboliem bija vārds, kas garāks par 0,
+                        // tad saglabā tā garumu
                         if (wordLen)
                         {
                             ++wordCount[wordLen - 1];
@@ -68,6 +71,7 @@ int main()
             ofstream fileOut("out.txt", ios::out);
             for (uint i = 0; i < min(longestWord, MAX_WORD_SIZE); ++i)
             {
+                // Saglabā izvades rindu simbolu virknē, lai nebūtu koda duplikācija.
                 string outputStr = "Vārdi garumā [" + to_string(i + 1) + "]: " + to_string(wordCount[i]) + "\n";
                 cout << outputStr;
                 fileOut << outputStr;
