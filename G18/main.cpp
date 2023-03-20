@@ -12,6 +12,9 @@
 // G18. Uzrakstīt funkciju, kas izmet no saraksta tos elementus, kuriem vērtība
 // vienāda ar to kārtas numuru.
 
+// Gunārs Ābeltiņš
+// 2023-03-20
+
 #include <windows.h>
 #include <iostream>
 #include <list>
@@ -113,7 +116,7 @@ int main()
         {
             for (auto *prev = customList.first, *i = prev->next; i; prev = i, i = i->next, ++pos)
             {
-                if (i && i->value == pos)
+                while (i && i->value == pos)
                 {
                     prev->next = i->next;
                     delete i;
@@ -142,3 +145,17 @@ int main()
 
     return 0;
 }
+
+//        Ievads | Izvads
+// --------------|--------------------
+//             3 | 
+//         1 2 3 |
+// --------------|--------------------
+//             4 | 2 5
+//       2 2 3 5 | 2 5
+// --------------|--------------------
+//             0 | 
+// --------------|--------------------
+//             5 | 5 4 2 1
+//     5 4 3 2 1 | 5 4 2 1
+
