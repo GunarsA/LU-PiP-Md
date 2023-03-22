@@ -9,9 +9,9 @@
 // ar vienādu atslēgu vērtību). Uzrakstīt arī palīgprogrammas, kas ļauj
 // izveidot failus f1 un f2 un izdrukā failu saturu.
 
+#include <windows.h>
 #include <iostream>
 #include <fstream>
-#include <windows.h>
 #include <vector>
 #include <tuple>
 #include <queue>
@@ -19,6 +19,37 @@
 #define MAX_LEN 30
 
 using namespace std;
+
+struct struc;
+
+template <typename T>
+int partition(T arr[], int low, int high);
+
+template <typename T>
+void quickSort(T arr[], int low, int high);
+
+void writeFile(string fileName);
+
+void outputFile(string fileName);
+
+void mergeFiles(vector<string> inFiles, string outFile);
+
+int main()
+{
+    SetConsoleOutputCP(CP_UTF8);
+
+    vector<string> fileNames = {"f1.bin", "f2.bin"};
+    string outputFileName = "f3.bin";
+
+    for (auto &i : fileNames)
+    {
+        writeFile(i);
+    }
+
+    mergeFiles(fileNames, outputFileName);
+
+    outputFile(outputFileName);
+}
 
 struct struc
 {
@@ -112,7 +143,9 @@ void outputFile(string fileName)
 
     if (fileIn.is_open())
     {
-        cout << "Atslēga" << "\t" << "Vārds" << endl;
+        cout << "Atslēga"
+             << "\t"
+             << "Vārds" << endl;
         while (true)
         {
             struc temp;
@@ -177,19 +210,4 @@ void mergeFiles(vector<string> inFiles, string outFile)
         fileOut.write((char *)&temp.key, sizeof(int));
         fileOut.write((char *)&temp.value.c_str()[0], MAX_LEN + 1);
     }
-}
-
-int main()
-{
-    SetConsoleOutputCP(CP_UTF8);
-    
-    vector<string> fileNames = {"f1.bin", "f2.bin"};
-    for (auto &i : fileNames)
-    {
-        writeFile(i);
-    }
-
-    string outputFileName = "f3.bin";
-    mergeFiles(fileNames, outputFileName);
-    outputFile(outputFileName);
 }
