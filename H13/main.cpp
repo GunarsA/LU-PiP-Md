@@ -13,6 +13,7 @@
 #include <fstream>
 #include <vector>
 #include <tuple>
+#include <queue>
 
 #define MAX_LEN 30
 
@@ -85,6 +86,8 @@ void writeFile(string fileName)
         vec.push_back(temp);
     }
 
+    cin.clear();
+
     if (vec.size())
     {
         quickSort(vec.data(), 0, vec.size() - 1);
@@ -99,9 +102,8 @@ void writeFile(string fileName)
     }
 }
 
-void readFile(string fileName)
+void outputFile(string fileName)
 {
-    vector<struc> vec;
     ifstream fileIn(fileName, ios::in | ios::binary);
 
     if (fileIn.is_open())
@@ -117,18 +119,70 @@ void readFile(string fileName)
             if (fileIn.eof())
                 break;
 
-            vec.push_back(temp);
+            cout << temp.key << " " << temp.value << endl;
         }
     }
+}
 
-    for (auto &i : vec)
+void mergeFiles(vector<string> inFiles, string outFile)
+{
+    ifstream fileIns[inFiles.size()];
+    priority_queue<pair<struc, int>> heap;
+
+    ofstream fileOut(outFile, ios::out | ios::binary);
+
+    for (int i = 0; i < inFiles.size(); ++i)
     {
-        cout << i.key << " " << i.value << endl;
+        fileIns[i].open(inFiles[i], ios::in | ios::binary);
+
+        struc temp;
+        temp.value.resize(MAX_LEN + 1);
+
+        fileIns[i].read((char *)&temp.key, sizeof(int));
+        fileIns[i].read((char *)&temp.value.c_str()[0], MAX_LEN + 1);
+
+        if (fileIns[i].eof())
+            continue;
+
+        temp.key *= -1;
+
+        heap.push({temp, i});
+    }
+
+    while (!heap.empty())
+    {
+        struc temp;
+
+        temp.value.resize(MAX_LEN + 1);
+
+        fileIns[heap.top().second].read((char *)&temp.key, sizeof(temp.key));
+        fileIns[heap.top().second].read((char *)&temp.value.c_str()[0], MAX_LEN + 1);
+
+        if (!fileIns[heap.top().second].eof())
+        {
+            temp.key *= -1;
+            heap.push({temp, heap.top().second});
+        }
+
+        temp = heap.top().first;
+        heap.pop();
+
+        temp.key *= -1;
+
+        fileOut.write((char *)&temp.key, sizeof(int));
+        fileOut.write((char *)&temp.value.c_str()[0], MAX_LEN + 1);
     }
 }
 
 int main()
 {
-    writeFile("f1.bin");
-    readFile("f1.bin");
+    vector<string> fileNames = {"f1.bin", "f2.bin"};
+    for (auto &i : fileNames)
+    {
+        writeFile(i);
+    }
+
+    string outputFileName = "f3.bin";
+    mergeFiles(fileNames, outputFileName);
+    outputFile(outputFileName);
 }
