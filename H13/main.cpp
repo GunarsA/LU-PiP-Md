@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <windows.h>
 #include <vector>
 #include <tuple>
 #include <queue>
@@ -77,13 +78,16 @@ void quickSort(T arr[], int low, int high)
 void writeFile(string fileName)
 {
     vector<struc> vec;
-    cout << "Ievadi vertības (beigas spied CTRL+Z): ";
+    cout << "Ievadi faila [" << fileName << "] saturu (beigās spied CTRL+Z)!" << endl;
 
     struc temp;
+    cout << "[int] [string]: ";
     while (cin >> temp.key && cin >> temp.value)
     {
         temp.value.resize(MAX_LEN + 1);
         vec.push_back(temp);
+
+        cout << "[int] [string]: ";
     }
 
     cin.clear();
@@ -108,6 +112,7 @@ void outputFile(string fileName)
 
     if (fileIn.is_open())
     {
+        cout << "Atslēga" << "\t" << "Vārds" << endl;
         while (true)
         {
             struc temp;
@@ -119,7 +124,7 @@ void outputFile(string fileName)
             if (fileIn.eof())
                 break;
 
-            cout << temp.key << " " << temp.value << endl;
+            cout << temp.key << "\t" << temp.value << endl;
         }
     }
 }
@@ -176,6 +181,8 @@ void mergeFiles(vector<string> inFiles, string outFile)
 
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
+    
     vector<string> fileNames = {"f1.bin", "f2.bin"};
     for (auto &i : fileNames)
     {
