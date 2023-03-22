@@ -12,16 +12,68 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <tuple>
+
+#define MAX_LEN 30
 
 using namespace std;
 
 struct struc
 {
     int key;
-    char value[31];
+    string value;
+
+    friend bool operator<(const struc &lhs, const struc &rhs)
+    {
+        return tie(lhs.key, lhs.value) < tie(rhs.key, rhs.value);
+    }
+
+    friend bool operator>(const struc &lhs, const struc &rhs)
+    {
+        return tie(lhs.key, lhs.value) > tie(rhs.key, rhs.value);
+    }
 };
 
-void createFile(string fileName)
+template <typename T>
+int partition(T arr[], int low, int high)
+{
+    T pivot = arr[low];
+    int i = low - 1, j = high + 1;
+
+    while (true)
+    {
+        do
+        {
+            ++i;
+        } while (arr[i] < pivot);
+
+        do
+        {
+            --j;
+        } while (arr[j] > pivot);
+
+        if (i >= j)
+        {
+            return j;
+        }
+
+        swap(arr[i], arr[j]);
+    }
+}
+
+template <typename T>
+void quickSort(T arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = partition(arr, low, high);
+
+        quickSort(arr, low, pivot);
+        quickSort(arr, pivot + 1, high);
+    }
+}
+
+void writeFile(string fileName)
 {
     vector<struc> vec;
     cout << "Ievadi vertības (beigas spied CTRL+Z): ";
@@ -29,11 +81,22 @@ void createFile(string fileName)
     struc temp;
     while (cin >> temp.key && cin >> temp.value)
     {
+        temp.value.resize(MAX_LEN + 1);
         vec.push_back(temp);
     }
 
-    ofstream fileOut(fileName, ios::out | ios::binary);
-    fileOut.write((char *)&vec[0], vec.size() * sizeof(struc));
+    if (vec.size())
+    {
+        quickSort(vec.data(), 0, vec.size() - 1);
+
+        ofstream fileOut(fileName, ios::out | ios::binary);
+
+        for (auto &i : vec)
+        {
+            fileOut.write((char *)&i.key, sizeof(int));
+            fileOut.write((char *)&i.value.c_str()[0], MAX_LEN + 1);
+        }
+    }
 }
 
 void readFile(string fileName)
@@ -46,7 +109,10 @@ void readFile(string fileName)
         while (true)
         {
             struc temp;
-            fileIn.read((char *)&temp, sizeof(struc));
+            temp.value.resize(MAX_LEN + 1);
+
+            fileIn.read((char *)&temp.key, sizeof(int));
+            fileIn.read((char *)&temp.value.c_str()[0], MAX_LEN + 1);
 
             if (fileIn.eof())
                 break;
@@ -63,6 +129,6 @@ void readFile(string fileName)
 
 int main()
 {
-    createFile("f1.bin");
+    writeFile("f1.bin");
     readFile("f1.bin");
 }
