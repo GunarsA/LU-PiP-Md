@@ -1,3 +1,5 @@
+// PS > g++ main.cpp; ./a.exe
+
 // Izveidot programmu valodā C++.  Ar faila komponenti tiek saprasts fiksēta
 // garuma ieraksts. Sīkākās prasības sk. Laboratorijas darbu noteikumos.
 
@@ -8,6 +10,8 @@
 // atslēgu pieaugšanas secībā (failos  nedrīkst parādīties divas komponentes
 // ar vienādu atslēgu vērtību). Uzrakstīt arī palīgprogrammas, kas ļauj
 // izveidot failus f1 un f2 un izdrukā failu saturu.
+
+// Gunārs Ābeltiņš 2023-03-22
 
 #include <windows.h>
 #include <iostream>
@@ -134,6 +138,8 @@ void writeFile(string fileName)
             fileOut.write((char *)&i.key, sizeof(int));
             fileOut.write((char *)&i.value.c_str()[0], MAX_LEN + 1);
         }
+
+        fileOut.close();
     }
 }
 
@@ -143,9 +149,7 @@ void outputFile(string fileName)
 
     if (fileIn.is_open())
     {
-        cout << "Atslēga"
-             << "\t"
-             << "Vārds" << endl;
+        cout << "Atslēga" << "\t" << "Vārds" << endl;
         while (true)
         {
             struc temp;
@@ -160,6 +164,8 @@ void outputFile(string fileName)
             cout << temp.key << "\t" << temp.value << endl;
         }
     }
+
+    fileIn.close();
 }
 
 void mergeFiles(vector<string> inFiles, string outFile)
@@ -210,4 +216,9 @@ void mergeFiles(vector<string> inFiles, string outFile)
         fileOut.write((char *)&temp.key, sizeof(int));
         fileOut.write((char *)&temp.value.c_str()[0], MAX_LEN + 1);
     }
+
+    for(auto &i: fileIns)
+        i.close();
+    
+    fileOut.close();
 }
