@@ -1,6 +1,16 @@
 #include <iostream>
 
+#define MAX_LEN 256
+
 using namespace std;
+
+void strcpy(char from[], char to[])
+{
+    int i = -1;
+    while (from[++i])
+        to[i] = from[i];
+    to[i] = '\0';
+}
 
 template <typename T>
 struct node
@@ -19,40 +29,47 @@ private:
 public:
     stack()
     {
-        this->_top = new node<T>{nullptr};
+        this->_top = nullptr;
         this->_size = 0;
     }
     ~stack()
     {
         while (this->_size)
-            (void)this->pop();
-
-        delete this->_top;
+            this->pop();
     }
     void push(T element)
     {
-        if (!(this->_size)++)
-            this->_top->value = element;
+        node<T> *temp = new node<T>;
+        strcpy(element, temp->value);
+
+        if (!this->_top)
+        {
+            temp->next = nullptr;
+            this->_top = temp;
+        }
         else
-            this->_top = new node<T>{this->_top, element};
+        {
+            temp->next = this->_top;
+            this->_top = temp;
+        }
+
+        ++(this->_size);
     }
-    T pop()
+    void top(T element)
     {
-        if (!this->_size)
-            return 0;
+        if (this->_top)
+            strcpy(this->_top->value, element);
+    }
+    void pop()
+    {
+        if (this->_top)
+        {
+            --(this->_size);
 
-        --(this->_size);
-
-        if (!this->_size)
-            return this->_top->value;
-
-        node<T> *nextNode = this->_top->next;
-        T currValue = this->_top->value;
-
-        delete this->_top;
-        this->_top = nextNode;
-
-        return currValue;
+            node<T> *nextNode = this->_top->next;
+            delete this->_top;
+            this->_top = nextNode;
+        }
     }
     int size()
     {
@@ -65,29 +82,32 @@ int main()
     (void)!freopen("post.in", "r", stdin);
     (void)!freopen("post.out", "w", stdout);
 
-    stack<string> arr['z' - 'a' + 1];
+    stack<char[MAX_LEN + 1]> arr['z' - 'a' + 1];
 
     char ch;
-    string temp = "";
+    char temp[MAX_LEN + 1];
+    int currLen = 0;
     while (cin.get(ch))
     {
 
         if (ch != ' ' && ch != '\n')
         {
-            temp.push_back(ch);
+            temp[currLen++] = ch;
         }
 
         if (ch == ' ' || ch == '\n' || cin.peek() == EOF)
         {
-            if (!temp.empty())
+            if (currLen)
             {
+                temp[currLen] = '\0';
+
                 if (temp[0] >= 'a' && temp[0] <= 'z')
                     arr[temp[0] - 'a'].push(temp);
                 else
                     arr[temp[0] - 'A'].push(temp);
             }
 
-            temp = "";
+            currLen = 0;
         }
     }
 
@@ -97,7 +117,11 @@ int main()
         while (arr[i].size())
         {
             empty = false;
-            cout << arr[i].pop() << " ";
+
+            arr[i].top(temp);
+            arr[i].pop();
+            
+            cout << temp << " ";
         }
     }
 
