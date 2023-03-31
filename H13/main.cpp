@@ -67,7 +67,7 @@ struct struc
 
     friend bool operator>(const struc &lhs, const struc &rhs)
     {
-        return tie(lhs.key, lhs.value) > tie(rhs.key, rhs.value);
+        return  rhs < lhs;
     }
 };
 
