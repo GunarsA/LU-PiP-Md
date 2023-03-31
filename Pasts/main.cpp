@@ -13,45 +13,38 @@ void strcpy(char from[], char to[])
 }
 
 template <typename T>
-struct node
+struct Stack
 {
-    node *next;
-    T value;
-};
+    struct Node
+    {
+        Node *next;
+        T value;
+    };
 
-template <typename T>
-class stack
-{
-private:
-    node<T> *_top;
+    typename Stack<T>::Node *_top;
     int _size;
 
-public:
-    stack()
+    Stack()
     {
         this->_top = nullptr;
         this->_size = 0;
     }
-    ~stack()
+    ~Stack()
     {
         while (this->_size)
             this->pop();
     }
     void push(T element)
     {
-        node<T> *temp = new node<T>;
+        typename Stack<T>::Node *temp = new Node;
         strcpy(element, temp->value);
 
         if (!this->_top)
-        {
             temp->next = nullptr;
-            this->_top = temp;
-        }
         else
-        {
             temp->next = this->_top;
-            this->_top = temp;
-        }
+
+        this->_top = temp;
 
         ++(this->_size);
     }
@@ -64,11 +57,11 @@ public:
     {
         if (this->_top)
         {
-            --(this->_size);
-
-            node<T> *nextNode = this->_top->next;
+            typename Stack<T>::Node *nextNode = this->_top->next;
             delete this->_top;
             this->_top = nextNode;
+
+            --(this->_size);
         }
     }
     int size()
@@ -82,18 +75,15 @@ int main()
     (void)!freopen("post.in", "r", stdin);
     (void)!freopen("post.out", "w", stdout);
 
-    stack<char[MAX_LEN + 1]> arr['z' - 'a' + 1];
+    Stack<char[MAX_LEN + 1]> arr['z' - 'a' + 1];
 
-    char ch;
     char temp[MAX_LEN + 1];
+    char ch;
     int currLen = 0;
     while (cin.get(ch))
     {
-
         if (ch != ' ' && ch != '\n')
-        {
             temp[currLen++] = ch;
-        }
 
         if (ch == ' ' || ch == '\n' || cin.peek() == EOF)
         {
@@ -120,7 +110,7 @@ int main()
 
             arr[i].top(temp);
             arr[i].pop();
-            
+
             cout << temp << " ";
         }
     }
