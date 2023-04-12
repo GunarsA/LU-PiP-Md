@@ -66,6 +66,71 @@ public:
     }
 };
 
+void eraseIndex(list<int> &list)
+{
+    int pos = 1;
+    for (auto i = list.begin(); i != list.end(); ++pos)
+        if (*i == pos)
+            i = list.erase(i);
+        else
+            ++i;
+}
+
+void eraseIndex(SingleLinkedList<int> &customList)
+{
+    int pos = 1;
+    while (customList.first && customList.first->value == pos)
+    {
+        auto *p = customList.first;
+        customList.first = customList.first->next;
+        delete p;
+
+        if (!customList.first)
+            customList.last = customList.first;
+
+        ++pos;
+    }
+    ++pos;
+    if (customList.first && customList.first->next)
+    {
+        for (auto *prev = customList.first, *i = prev->next; i; prev = i, i = i->next, ++pos)
+        {
+            while (i && i->value == pos)
+            {
+                prev->next = i->next;
+                delete i;
+                i = prev->next;
+
+                ++pos;
+            }
+
+            if (!i)
+            {
+                customList.last = prev;
+                break;
+            }
+        }
+    }
+}
+
+void printList(list<int> &list)
+{
+    for (auto &i : list)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
+}
+
+void printList(SingleLinkedList<int> &customList)
+{
+    for (auto &i = customList.first; i; i = i->next)
+    {
+        cout << i->value << " ";
+    }
+    cout << endl;
+}
+
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
@@ -89,55 +154,13 @@ int main()
             customList.push_back(temp);
         }
 
-        int pos = 1;
-        for (auto i = list.begin(); i != list.end(); ++pos)
-            if (*i == pos)
-                i = list.erase(i);
-            else
-                ++i;
+        eraseIndex(list);
         cout << "Saraksta elementi pēc pārveidojuma: ";
-        for (auto &i : list)
-        {
-            cout << i << " ";
-        }
-        cout << endl;
+        printList(list);
 
-        for (pos = 1; customList.first && customList.first->value == pos; ++pos)
-        {
-            auto *p = customList.first;
-            customList.first = customList.first->next;
-            delete p;
-
-            if (!customList.first)
-                customList.last = customList.first;
-        }
-        ++pos;
-        if (customList.first && customList.first->next)
-        {
-            for (auto *prev = customList.first, *i = prev->next; i; prev = i, i = i->next, ++pos)
-            {
-                while (i && i->value == pos)
-                {
-                    prev->next = i->next;
-                    delete i;
-                    i = prev->next;
-
-                    ++pos;
-                }
-
-                if (!i)
-                {
-                    customList.last = prev;
-                    break;
-                }
-            }
-        }
+        eraseIndex(customList);
         cout << "Paštaisītā saraksta elementi pēc pārveidojumiem: ";
-        for (auto &i = customList.first; i; i = i->next)
-        {
-            cout << i->value << " ";
-        }
-        cout << endl;
+        printList(customList);
 
         cout << "Atkārtot? (1 | 0): ";
         cin >> go;
