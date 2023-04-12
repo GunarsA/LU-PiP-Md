@@ -11,7 +11,7 @@
 // ar vienādu atslēgu vērtību). Uzrakstīt arī palīgprogrammas, kas ļauj
 // izveidot failus f1 un f2 un izdrukā failu saturu.
 
-// Krišjānis Petručeņa 2023-03-22
+// Gunārs Ābeltiņš 2023-03-22
 
 #include <windows.h>
 #include <iostream>
@@ -59,12 +59,10 @@ struct struc
 {
     int key;
     string value;
-
     friend bool operator<(const struc &lhs, const struc &rhs)
     {
         return tie(lhs.key, lhs.value) < tie(rhs.key, rhs.value);
     }
-
     friend bool operator>(const struc &lhs, const struc &rhs)
     {
         return  rhs < lhs;

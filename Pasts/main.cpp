@@ -1,13 +1,13 @@
 #include <iostream>
 
-#define MAX_LEN 256
+const int MAX_LEN = 256;
 
 using namespace std;
 
 void strcpy(char from[], char to[])
 {
-    int i = -1;
-    while (from[++i])
+    int i = 0;
+    while (from[i++])
         to[i] = from[i];
     to[i] = '\0';
 }
@@ -72,8 +72,8 @@ struct Stack
 
 int main()
 {
-    (void)!freopen("post.in", "r", stdin);
-    (void)!freopen("post.out", "w", stdout);
+    freopen("post.in", "r", stdin);
+    freopen("post.out", "w", stdout);
 
     Stack<char[MAX_LEN + 1]> arr['z' - 'a' + 1];
 
