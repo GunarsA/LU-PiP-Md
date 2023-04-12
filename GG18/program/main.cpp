@@ -19,117 +19,10 @@
 #include <iostream>
 #include <list>
 
+#include "header.hpp"
+#include "program.cpp"
+
 using namespace std;
-
-template <typename T>
-class SingleLinkedList
-{
-    struct node
-    {
-        T value;
-        node *next;
-    };
-
-public:
-    node *first = NULL;
-    node *last = NULL;
-
-    SingleLinkedList()
-    {
-        cout << "Saraksts inicializēts!" << endl;
-    }
-
-    ~SingleLinkedList()
-    {
-        for (auto i = first; i; i = first)
-        {
-            first = first->next;
-            delete i;
-        }
-
-        cout << "Saraksts izdzēsts!" << endl;
-    }
-
-    void push_back(T value)
-    {
-        node *newNode = new node{value, nullptr};
-
-        if (!first)
-        {
-            first = last = newNode;
-        }
-        else
-        {
-            last->next = newNode;
-            last = last->next;
-        }
-    }
-};
-
-void eraseIndex(list<int> &list)
-{
-    int pos = 1;
-    for (auto i = list.begin(); i != list.end(); ++pos)
-        if (*i == pos)
-            i = list.erase(i);
-        else
-            ++i;
-}
-
-void eraseIndex(SingleLinkedList<int> &customList)
-{
-    int pos = 1;
-    while (customList.first && customList.first->value == pos)
-    {
-        auto *p = customList.first;
-        customList.first = customList.first->next;
-        delete p;
-
-        if (!customList.first)
-            customList.last = customList.first;
-
-        ++pos;
-    }
-    ++pos;
-    if (customList.first && customList.first->next)
-    {
-        for (auto *prev = customList.first, *i = prev->next; i; prev = i, i = i->next, ++pos)
-        {
-            while (i && i->value == pos)
-            {
-                prev->next = i->next;
-                delete i;
-                i = prev->next;
-
-                ++pos;
-            }
-
-            if (!i)
-            {
-                customList.last = prev;
-                break;
-            }
-        }
-    }
-}
-
-void printList(list<int> &list)
-{
-    for (auto &i : list)
-    {
-        cout << i << " ";
-    }
-    cout << endl;
-}
-
-void printList(SingleLinkedList<int> &customList)
-{
-    for (auto &i = customList.first; i; i = i->next)
-    {
-        cout << i->value << " ";
-    }
-    cout << endl;
-}
 
 int main()
 {
@@ -138,21 +31,17 @@ int main()
     int go;
     do
     {
-        cout << "Ievadiet elementu skaitu: ";
-        int len;
-        cin >> len;
-
         list<int> list;
         SingleLinkedList<int> customList;
 
-        cout << "Ievadiet [" << len << "] elementu(s): ";
-        for (int i = 0; i < len; ++i)
+        cout << "Ievadiet elementu(s) (Ievadi pabeidz ar CTRL+Z): ";
+        for (int value; cin >> value;)
         {
-            int temp;
-            cin >> temp;
-            list.push_back(temp);
-            customList.push_back(temp);
+            list.push_back(value);
+            customList.push_back(value);
         }
+        cin.clear();
+        cin.ignore(INT_MAX, '\n');
 
         eraseIndex(list);
         cout << "Saraksta elementi pēc pārveidojuma: ";
