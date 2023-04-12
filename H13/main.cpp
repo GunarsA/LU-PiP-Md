@@ -11,7 +11,7 @@
 // ar vienādu atslēgu vērtību). Uzrakstīt arī palīgprogrammas, kas ļauj
 // izveidot failus f1 un f2 un izdrukā failu saturu.
 
-// Gunārs Ābeltiņš 2023-03-22
+// Krišjānis Petručeņa 2023-03-22
 
 #include <windows.h>
 #include <iostream>
