@@ -6,8 +6,8 @@ using namespace std;
 
 void strcpy(char from[], char to[])
 {
-    int i = 0;
-    while (from[i++])
+    int i = -1;
+    while (from[++i])
         to[i] = from[i];
     to[i] = '\0';
 }
