@@ -42,6 +42,21 @@ void test2()
 
 void test3()
 {
+    SingleLinkedList<int> customList;
+
+    try
+    {
+        eraseIndex(customList);
+    }
+    catch (std::runtime_error &e)
+    {
+        if (e.what() == std::string("List is empty"))
+            cout << 1 << endl;
+        else
+            cout << 0 << endl;
+        return;
+    }
+    cout << 0 << endl;
 }
 
 int main()

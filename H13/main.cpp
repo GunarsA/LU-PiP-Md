@@ -220,3 +220,15 @@ void mergeFiles(vector<string> inFiles, string outFile)
     
     fileOut.close();
 }
+
+//   Ievads | Izvads
+// ---------|---------------
+//   3 test | Atslēga Vārds
+//   45 yes | 3       test
+//     7 no | 7       no
+//   CTRL+Z | 23      no
+//    23 no | 45      yes
+//   CTRL+Z |
+// ---------|---------------
+//   CTRL+Z | 
+//   CTRL+Z |
