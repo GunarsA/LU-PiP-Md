@@ -45,7 +45,7 @@ void eraseIndex(std::list<int> &list)
 void eraseIndex(SingleLinkedList<int> &customList)
 {
     if (!customList.first)
-        throw std::runtime_error("List i empty");
+        throw std::runtime_error("List is empty");
     int pos = 1;
     while (customList.first && customList.first->value == pos)
     {
