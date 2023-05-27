@@ -1,4 +1,6 @@
 #include <iostream>
+#include <time.h>
+#include <iomanip>
 
 const int MAX_SIZE = 10000;
 
@@ -203,8 +205,13 @@ void solve()
         cout << endl;
     }
 }
-
 int main()
 {
+    clock_t start, end;
+    start = clock();
+
     solve();
+
+    end = clock();
+    cerr << fixed << setprecision(5) << "Time: " << (double)(end - start) / CLOCKS_PER_SEC << endl;
 }
