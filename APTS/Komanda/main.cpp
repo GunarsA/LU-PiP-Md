@@ -17,7 +17,7 @@ struct struc
 
     friend bool operator>(const struc &lhs, const struc &rhs)
     {
-        return rhs < lhs;
+        return lhs.idx > rhs.idx;
     }
 };
 
