@@ -42,22 +42,6 @@ private:
         }
     }
 
-    node *merge(node *l, node *r)
-    {
-        push(l);
-        push(r);
-        node *t;
-        if (!l || !r)
-            return l ? l : r;
-        else if (l->prior > r->prior)
-            l->r = merge(l->r, r), t = l;
-        else
-            r->l = merge(l, r->l), t = r;
-        upd_cnt(t);
-
-        return t;
-    }
-
     pair<node *, node *> split(node *const t, int key, int add = 0)
     {
         if (!t)
@@ -74,18 +58,85 @@ private:
         return {l, r};
     }
 
-    void output_helper(node *t)
+    node *merge(node *l, node *r)
+    {
+        push(l);
+        push(r);
+        node *t;
+        if (!l || !r)
+            return l ? l : r;
+        else if (l->prior > r->prior)
+            l->r = merge(l->r, r), t = l;
+        else
+            r->l = merge(l, r->l), t = r;
+        upd_cnt(t);
+
+        return t;
+    }
+
+    void print(node *t)
     {
         if (!t)
             return;
         push(t);
-        output_helper(t->l);
-        printf("%d ", t->value);
-        output_helper(t->r);
+        print(t->l);
+        cout << t->value << " ";
+        print(t->r);
+    }
+
+    void clear(node *t)
+    {
+        if (!t)
+            return;
+        clear(t->l);
+        clear(t->r);
+        delete t;
     }
 
 public:
     implicit_treap() : root(nullptr) {}
+
+    ~implicit_treap()
+    {
+        clear(root);
+    }
+
+    void push_back(T value)
+    {
+        root = merge(root, new node(value));
+    }
+
+    void insert(int pos, T value)
+    {
+        auto [a, b] = split(root, pos);
+        root = merge(merge(a, new node(value)), b);
+    }
+
+    void erase(int pos)
+    {
+        auto [a, b] = split(root, pos);
+        auto [c, d] = split(b, 1);
+        delete c;
+        root = merge(a, d);
+    }
+
+    T operator[](int pos) const
+    {
+        auto [a, b] = split(root, pos);
+        auto [c, d] = split(b, 1);
+        T res = c->value;
+        root = merge(merge(a, c), d);
+        return res;
+    }
+
+    T &operator[](int pos)
+    {
+        auto [a, b] = split(root, pos);
+        auto [c, d] = split(b, 1);
+        T &res = c->value;
+        root = merge(merge(a, c), d);
+        return res;
+    }
 
     void reverse(int l, int r)
     {
@@ -96,68 +147,46 @@ public:
         root = merge(a, b);
     }
 
-    void output()
+    int size() const
     {
-        output_helper(root);
-        printf("\n");
+        return cnt(root);
     }
 
-    void push_back(T value)
+    void print()
     {
-        root = merge(root, new node(value));
+        print(root);
+        cout << endl;
     }
 
-    void erase(int pos)
+    void clear()
     {
-        auto [a, b] = split(root, pos);
-        auto [c, d] = split(b, 1);
-        root = merge(a, d);
-    }
-    void insert(int pos, T value)
-    {
-        auto [a, b] = split(root, pos);
-        root = merge(merge(a, new node(value)), b);
-    }
-    T operator[](int pos) const
-    {
-        auto [a, b] = split(root, pos);
-        auto [c, d] = split(b, 1);
-        T res = c->value;
-        root = merge(merge(a, c), d);
-        return res;
-    }
-    T &operator[](int pos)
-    {
-        auto [a, b] = split(root, pos);
-        auto [c, d] = split(b, 1);
-        T &res = c->value;
-        root = merge(merge(a, c), d);
-        return res;
+        clear(root);
+        root = nullptr;
     }
 };
 
 main()
 {
-    // int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    // implicit_treap<int> treap;
-    // for (int i = 0; i < 10; i++)
-    //     treap.push_back(arr[i]);
+    int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    implicit_treap<int> treap1;
+    for (int i = 0; i < 10; i++)
+        treap1.push_back(arr[i]);
 
-    // treap.output();
-    // treap.reverse(2, 5);
-    // treap.output();
-    // treap.reverse(2, 5);
-    // treap.output();
-    // treap.erase(9);
-    // treap.output();
-    // treap.insert(0, 123);
-    // treap.output();
+    treap1.print();
+    treap1.reverse(2, 5);
+    treap1.print();
+    treap1.reverse(2, 5);
+    treap1.print();
+    treap1.erase(9);
+    treap1.print();
+    treap1.insert(0, 123);
+    treap1.print();
 
-    // treap[0] = 321;
+    treap1[0] = 321;
 
-    // for (int i = 0; i < 10; i++)
-    //     printf("%d ", treap[i]);
-    // printf("\n");
+    for (int i = 0; i < 10; i++)
+        printf("%d ", treap1[i]);
+    printf("\n");
 
     int n, q, m;
     cin >> n >> q >> m;
