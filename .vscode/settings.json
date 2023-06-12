@@ -8,5 +8,6 @@
         "iosfwd": "cpp",
         "tuple": "cpp",
         "*.tcc": "cpp"
-    }
+    },
+    "cph.general.onceMaintainerMessage": false
 }

@@ -2,7 +2,7 @@
 #include <time.h>
 #include <iomanip>
 
-const int MAX_SIZE = 10000;
+const int MAX_SIZE = 10009;
 
 using namespace std;
 

@@ -188,37 +188,42 @@ main()
         printf("%d ", treap1[i]);
     printf("\n");
 
-    int n, q, m;
-    cin >> n >> q >> m;
+    treap1.clear();
+    treap1.print();
 
-    implicit_treap<int> treap;
-    for (int i = 0; i < n; i++)
-    {
-        int temp;
-        cin >> temp;
-        treap.push_back(temp);
-    }
+    // ------------------------------------------------------------------------
 
-    for (int i = 0; i < q; i++)
-    {
-        int opt, l, r;
-        cin >> opt >> l >> r;
-        --l, --r;
+    // int n, q, m;
+    // cin >> n >> q >> m;
 
-        if (opt == 1)
-        {
-            int temp = treap[r];
-            treap.erase(r);
-            treap.insert(l, temp);
-        }
-        else
-            treap.reverse(l, r);
-    }
+    // implicit_treap<int> treap;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     int temp;
+    //     cin >> temp;
+    //     treap.push_back(temp);
+    // }
 
-    for (int i = 0; i < m; i++)
-    {
-        int temp;
-        cin >> temp;
-        cout << treap[temp - 1] << " ";
-    }
+    // for (int i = 0; i < q; i++)
+    // {
+    //     int opt, l, r;
+    //     cin >> opt >> l >> r;
+    //     --l, --r;
+
+    //     if (opt == 1)
+    //     {
+    //         int temp = treap[r];
+    //         treap.erase(r);
+    //         treap.insert(l, temp);
+    //     }
+    //     else
+    //         treap.reverse(l, r);
+    // }
+
+    // for (int i = 0; i < m; i++)
+    // {
+    //     int temp;
+    //     cin >> temp;
+    //     cout << treap[temp - 1] << " ";
+    // }
 }
